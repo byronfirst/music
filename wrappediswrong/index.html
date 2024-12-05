@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" href="/images/favicon.ico" />
+    <title>See Your Actual Spotify Wrapped Data</title>
+    <script src="src/script.ts" type="module"></script>
+    <link rel="stylesheet" href="https://developer-assets.spotifycdn.com/_next/static/css/9668fa80a2943966.css" />
+    <style>
+        body {
+            font-family: var(--encore-body-font-stack, sans-serif);
+            background-color: var(--background-base, #f5f5f5);
+            color: var(--text-base, #000);
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: var(--background-elevated-base, #400073);
+            color: var(--text-base, #fff);
+            padding: 16px 32px;
+            text-align: center;
+            width: 100%;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            padding: 16px;
+            background-color: var(--background-highlight, #290a50);
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-base, #fff);
+            padding: 8px 16px;
+            border-radius: 12px;
+            background-color: var(--background-tinted-base, #1e073c);
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: var(--background-tinted-highlight, #551e99);
+        }
+
+        .dashboard {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            /* Space between rows */
+            padding: 32px;
+        }
+
+        .container {
+            max-width: 1200px;
+            /* Limit maximum width on larger screens */
+            margin: 0 auto;
+            /* Center the content */
+            padding: 0 16px;
+            /* Add padding for smaller screens */
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            /* Equal spacing */
+            gap: 24px;
+            /* Space between sections in a row */
+            flex-wrap: wrap;
+        }
+
+        .widget {
+            background-color: var(--background-elevated-base, #fff);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            flex: 1;
+        }
+
+        .widget h2 {
+            margin: 0 0 16px 0;
+            font-size: 1.5rem;
+            color: var(--text-bright-accent, #107434);
+        }
+
+        button {
+            padding: 8px 16px;
+            background-color: var(--background-highlight, #107434);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: var(--background-tinted-highlight, #551e99);
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                display: flex;
+                flex-direction: column;
+                /* Stack rows vertically */
+                align-items: center;
+                /* Center content horizontally */
+                justify-content: center;
+                /* Optionally center vertically */
+                padding: 16px;
+                /* Add consistent padding */
+                margin: 0 auto;
+                /* Center the dashboard itself */
+                width: 100%;
+                /* Ensure it fills the available width */
+                box-sizing: border-box;
+                /* Include padding in the width calculation */
+            }
+
+            .row {
+                flex-direction: column;
+                /* Stack widgets vertically */
+                align-items: center;
+                /* Center widgets horizontally */
+                gap: 16px;
+                /* Add spacing between stacked widgets */
+                width: 100%;
+                /* Allow rows to fill the container */
+            }
+
+            .widget {
+                width: 100%;
+                /* Allow widgets to fill the full width */
+                max-width: 400px;
+                /* Optional: Set a max width for widgets */
+                margin: 0 auto;
+                /* Center each widget */
+            }
+
+            nav {
+                display: flex;
+                /* Make nav a flex container */
+                justify-content: center;
+                /* Center the content horizontally */
+                align-items: center;
+                /* Center the content vertically */
+                padding: 16px;
+                /* Add consistent padding */
+                width: 100%;
+                /* Ensure it spans the full screen width */
+                margin: 0;
+                /* Remove unnecessary margins */
+                box-sizing: border-box;
+                /* Include padding in width calculation */
+                background-color: var(--background-highlight, #290a50);
+                /* Full width background */
+            }
+
+            nav a {
+                display: inline-block;
+                /* Ensure links are inline */
+                text-align: center;
+                /* Center text inside the link */
+                margin: 0;
+                /* Remove unnecessary margins */
+                padding: 8px 16px;
+                /* Add spacing for touch interaction */
+                width: auto;
+                /* Prevent links from stretching unnecessarily */
+                color: var(--text-base, #fff);
+                /* Keep the text color consistent */
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>See Your Actual Spotify Wrapped Data</h1>
+        <button id="login-button">Login with Spotify</button>
+    </header>
+
+
+    <main class="dashboard container">
+        <!-- Row 1 -->
+        <div class="row">
+            <section class="widget">
+                <h2>Top Artists - Last 4 Weeks</h2>
+                <button onclick="fetchTopArtists('short_term')">Show Artists</button>
+                <ul id="short_term-artists"></ul>
+            </section>
+
+            <section class="widget">
+                <h2>Top Songs - Last 4 Weeks</h2>
+                <button onclick="fetchTopSongs('short_term')">Show Songs</button>
+                <ul id="short_term-songs"></ul>
+            </section>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="row">
+            <section class="widget">
+                <h2>Top Artists - Last 6 Months</h2>
+                <button onclick="fetchTopArtists('medium_term')">Show Artists</button>
+                <ul id="medium_term-artists"></ul>
+            </section>
+
+            <section class="widget">
+                <h2>Top Songs - Last 6 Months</h2>
+                <button onclick="fetchTopSongs('medium_term')">Show Songs</button>
+                <ul id="medium_term-songs"></ul>
+            </section>
+        </div>
+
+        <!-- Row 3 -->
+        <div class="row">
+            <section class="widget">
+                <h2>Top Artists - Last Year</h2>
+                <button onclick="fetchTopArtists('long_term')">Show Artists</button>
+                <ul id="long_term-artists"></ul>
+            </section>
+
+            <section class="widget">
+                <h2>Top Songs - Last Year</h2>
+                <button onclick="fetchTopSongs('long_term')">Show Songs</button>
+                <ul id="long_term-songs"></ul>
+            </section>
+        </div>
+    </main>
+
+
+
+
+</body>
+
+</html>
